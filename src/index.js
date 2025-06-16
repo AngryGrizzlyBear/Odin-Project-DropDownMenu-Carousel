@@ -28,9 +28,21 @@ function addCarouselImages() {
   nextBtn.textContent = '>';
   nextBtn.classList.add('carousel-btn', 'next');
 
+  const dotsContainer = document.createElement('div');
+  dotsContainer.classList.add('carousel-dots');
+
+  const dots = images.map((_, index) => {
+    const dot = document.createElement('button');
+    dot.classList.add('carousel-dot');
+    if (index === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
+    return dot;
+  });
+
   imageContainer.appendChild(prevBtn);
   imageContainer.appendChild(track);
   imageContainer.appendChild(nextBtn);
+  imageContainer.appendChild(dotsContainer);
 
   document.body.appendChild(imageContainer);
 
@@ -40,6 +52,10 @@ function addCarouselImages() {
 
   function updateCarousel() {
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
   }
 
   prevBtn.addEventListener('click', () => {
@@ -50,6 +66,13 @@ function addCarouselImages() {
   nextBtn.addEventListener('click', () => {
     currentIndex = (currentIndex + 1) % totalImages;
     updateCarousel();
+  });
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      currentIndex = index;
+      updateCarousel();
+    });
   });
   updateCarousel();
 }
