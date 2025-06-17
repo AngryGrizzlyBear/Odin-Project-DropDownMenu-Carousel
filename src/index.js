@@ -48,8 +48,16 @@ function addCarouselImages() {
 
   let currentIndex = 0;
   const totalImages = images.length;
-  //   const imageElements = track.querySelectorAll('.carousel-image');
+  const intervalTime = 3000;
+  let autoplayInterval;
 
+  function startAutoplay() {
+    clearInterval(autoplayInterval);
+    autoplayInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % totalImages;
+      updateCarousel()
+    }, intervalTime);
+  }
   function updateCarousel() {
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
 
@@ -61,20 +69,24 @@ function addCarouselImages() {
   prevBtn.addEventListener('click', () => {
     currentIndex = (currentIndex - 1 + totalImages) % totalImages;
     updateCarousel();
+    startAutoplay();
   });
 
   nextBtn.addEventListener('click', () => {
     currentIndex = (currentIndex + 1) % totalImages;
     updateCarousel();
+    startAutoplay();
   });
 
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       currentIndex = index;
       updateCarousel();
+      startAutoplay();
     });
   });
   updateCarousel();
+  startAutoplay();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
